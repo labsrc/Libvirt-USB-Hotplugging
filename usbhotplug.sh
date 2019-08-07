@@ -27,7 +27,7 @@ removeDevice () {
 	maxloop=5
 	while [ ${devcheck} -gt 0 ]; do
 		if [ ${maxloop} -gt 0 ]; then
-			/usr/sbin/virsh detach-device ${vmname} /boot/config/usb-${vendorid}-${productid}.xml 2>&1 | while read line; do echo "[$(date '+%Y-%m-%d %H:%M:%S')]  $line" >> /root/usbhotplug.log; done;
+			/usr/sbin/virsh detach-device ${vmname} /etc/libvirt/qemu/USB/usb-${vendorid}-${productid}.xml 2>&1 | while read line; do echo "[$(date '+%Y-%m-%d %H:%M:%S')]  $line" >> /root/usbhotplug.log; done;
 			((--maxloop))
 			sleep 2
 		else
@@ -38,7 +38,7 @@ removeDevice () {
 
 # Add Device Function
 addDevice () {
-	/usr/sbin/virsh attach-device ${vmname} /boot/config/usb-${vendorid}-${productid}.xml --current 2>&1 | while read line; do echo "[$(date '+%Y-%m-%d %H:%M:%S')]  $line" >> /root/usbhotplug.log; done;
+	/usr/sbin/virsh attach-device ${vmname} /etc/libvirt/qemu/USB/usb-${vendorid}-${productid}.xml --current 2>&1 | while read line; do echo "[$(date '+%Y-%m-%d %H:%M:%S')]  $line" >> /root/usbhotplug.log; done;
 }
 
 # Main Code
@@ -49,7 +49,7 @@ if [ ${action} = 'add' ]; then
 		addDevice
 		sleepon=true
 	else
-		touch -a /root/attachnotrun
+		touch -a /root/usbattachnotrun
 		exit 0
 	fi
 elif [ ${action} = 'remove' ]; then
@@ -57,7 +57,7 @@ elif [ ${action} = 'remove' ]; then
 		touch -a ${timecheckfile}
 		removeDevice
 	else
-		touch -a /root/detachnotrun
+		touch -a /root/usbdetachnotrun
 		exit 0
 	fi
 else
@@ -68,4 +68,3 @@ fi
 if [ ${sleepon} = true ]; then
 	sleep 2
 fi
-
