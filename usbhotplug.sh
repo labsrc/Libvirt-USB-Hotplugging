@@ -1,6 +1,6 @@
 #!/bin/bash
 action=$1
-vmname=$2
+vmname="$2"
 vendorid=$3
 productid=$4
 sleepon=false
